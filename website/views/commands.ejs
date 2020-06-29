@@ -1,0 +1,232 @@
+<html>
+    <head>
+        <title>RoundBot under construction</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" type="text/css" href="/assets/css/reset.css">
+        <link rel="stylesheet" type="text/css" href="/assets/css/navbar.css">
+        <link rel="stylesheet" type="text/css" href="/assets/css/commands.css">
+        <style>
+            #content{
+                max-width: 900px;
+                width: 100%;
+                margin: auto;
+                padding: 12px;
+            }
+        </style>
+    </head>
+    <body>
+        <%- include('partials/navbar', {username}) %>
+        <br>
+        <br>
+        <div id="content">
+            <h1>RoundBot Commands List</h1>
+            <p>Anything between brackets("[]") represents an input you can or should fill. Do not include the bracket in the command, but instead replace it with the requested input type.</p>
+            <br>
+            <div>
+                <h2>Public Commands</h2>
+                <p>Commands that are designed to be safely used by the public</p>
+                <br>
+                <div>
+                    <div id="help" class="commandcard">
+                        <p class="command">!help</p>
+                        <p class="commanddescription">RoundBot replies with a list of commands designed to be safely used by the public.</p>
+                    </div>
+                    <div id="ping" class="commandcard">
+                        <p class="command">!ping</p>
+                        <p class="commanddescription">RoundBot replies with the latency in milliseconds for how long it takes to receive a command and respond. This is typically used to test if RoundBot is operating normally.</p>
+                    </div>
+                    <div id="about" class="commandcard">
+                        <p class="command">!about</p>
+                        <p class="commanddescription">RoundBot replies with a description of itself.</p>
+                    </div>
+                    <div id="invite" class="commandcard">
+                        <p class="command">!invite</p>
+                        <p class="commanddescription">RoundBot replies with an invite link you can use to add RoundBot to your server.</p>
+                    </div>
+                    <div id="meme" class="commandcard">
+                        <p class="command">!meme</p>
+                        <p class="commanddescription">RoundBot replies with a random meme pulled from Reddit.</p>
+                    </div>
+                    <div id="joke" class="commandcard">
+                        <p class="command">!joke</p>
+                        <p class="commanddescription">RoundBot replies with a random joke pulled from our database.</p>
+                    </div>
+                    <div id="8ball" class="commandcard">
+                        <p class="command">!8ball [question]</p>
+                        <p class="commanddescription">RoundBot replies with a yes, no, or maybe type of response.</p>
+                        <p class="cli">!8ball Will I develop an AI system?</p>
+                    </div>
+                    <div id="roast" class="commandcard">
+                        <p class="command">!roast</p>
+                        <p class="commanddescription">RoundBot replies with a random insult pulled from our database.</p>
+                    </div>
+                    <div id="compile" class="commandcard">
+                        <p class="command">!compile [coding_language] [code]</p>
+                        <p class="commanddescription">RoundBot executes the specified code for the specified language in a sandbox. It then replies with the output. Languages you may select include: (js|javascript), lua, (cpp|c++), c#, (py|python), php</p>
+                        <p class="cli">!compile js console.log("Hello World!")</p>
+                    </div>
+                    <div id="whois" class="commandcard">
+                        <p class="command">!whois [@mention]</p>
+                        <p class="commanddescription">RoundBot replies with the mentioned user's commonly requested Discord information.</p>
+                        <p class="cli">!whois @FF#0255</p>
+                    </div>
+                    <div id="guildinfo" class="commandcard">
+                        <p class="command">!guildinfo</p>
+                        <p class="commanddescription">RoundBot replies with information of the Guild, aka Server.</p>
+                    </div>
+                    <div id="listmods" class="commandcard">
+                        <p class="command">!listmods</p>
+                        <p class="commanddescription">RoundBot replies the list of staff members, such as admins, moderators, and mini-moderators.</p>
+                    </div>
+                </div>
+            </div>
+            <br>
+            <div>
+                <h2>Moderator Commands</h2>
+                <p>These commands are only accessible to those with the ADMINISTRATOR permission, admin role, and moderator role</p>
+                <br>
+                <div>
+                    <div id="ban" class="commandcard">
+                        <p class="command">!ban [@mention]</p>
+                        <p class="commanddescription">RoundBot bans the mentioned user from the guild.</p>
+                        <br>
+                        <div>
+                            <h3>Attaching A Reason</h3>
+                            <p>To attach a reason for banning them, you can append the --reason option. Doing so would look like:</p>
+                            <p class="cli">!ban @FF#0255 --reason "Aggressive spamming"</p>
+                            <p>If you'll be attaching no other parameter, you can simply add your reason immediately after the mention. Example: </p>
+                            <p class="cli">!ban @FF#0255 Aggressive spamming</p>
+                            <p>Attaching a reason will reflect onto the guild's audit log. RoundBot will DM the user their ban reason.</p>
+                        </div>
+                    </div>
+                    <div id="unban" class="commandcard">
+                        <p class="command">!unban [@mention]</p>
+                        <p class="commanddescription">RoundBot unbans the mentioned user from the guild.</p>
+                    </div>
+                    <div id="kick" class="commandcard">
+                        <p class="command">!kick [@mention]</p>
+                        <p class="commanddescription">RoundBot kicks the mentioned user from the guild.</p>
+                        <br>
+                        <div>
+                            <h3>Attaching A Reason</h3>
+                            <p>To attach a reason for kicking them, you can append the --reason option. Doing so would look like:</p>
+                            <p class="cli">!kick @FF#0255 --reason "Aggressive spamming"</p>
+                            <p>If you'll be attaching no other parameter, you can simply add your reason immediately after the mention. Example: </p>
+                            <p class="cli">!kick @FF#0255 Aggressive spamming</p>
+                            <p>Attaching a reason will reflect onto the guild's audit log. RoundBot will DM the user their kick reason.</p>
+                        </div>
+                    </div>
+                    <div id="mute" class="commandcard">
+                        <p class="command">!mute [@mention]</p>
+                        <p class="commanddescription">RoundBot adds the "mute" role to the mentioned member. If configured correctly, the mute role should prevent the mentioned member from being able to chat in text channels or talk in voice channels.</p>
+                        <br>
+                        <div>
+                            <h3>Attaching A Reason</h3>
+                            <p>To attach a reason for muting them, you can append the --reason option. Doing so would look like:</p>
+                            <p class="cli">!mute @FF#0255 --reason "Talking too much"</p>
+                            <p>If you'll be attaching no other parameter, you can simply add your reason immediately after the mention. Example: </p>
+                            <p class="cli">!mute @FF#0255 Talking too much</p>
+                            <p>Attaching a reason will reflect onto the guild's audit log. RoundBot will DM the user their mute reason.</p>
+                        </div>
+                        <br>
+                        <div>
+                            <h3>Setting an Unmute Timer</h3>
+                            <p>To unmute the user after a certain amount of hours, you must use the --hours option. For example, to mute the user for six hours, you would do it like so:</p>
+                            <p class="cli">!mute @FF#0255 --hours 6</p>
+                            <p>To unmute the user after a certain amount of days, you must use the --days option. For example, to mute the user for 3 days, you would do it like so:</p>
+                            <p class="cli">!mute @FF#0255 --days 3</p>
+                            <p>You can only mute someone for up to 14 days or 336 hours. You can only choose one of --hours or --days when muting someone. Using both --days and --hours will not sum up the mute expiration time.</p>
+                        </div>
+                    </div>
+                    <div id="unmute" class="commandcard">
+                        <p class="command">!unmute [@mention]</p>
+                        <p class="commanddescription">RoundBot removes the mute role from the mentioned member.</p>
+                    </div>
+                    <div id="warn" class="commandcard">
+                        <p class="command">!warn [@mention]</p>
+                        <p class="commanddescription">RoundBot adds the warn role to the mentioned member. The role does nothing. It is simply a marker. If a moderator sees that the user has the warned role, they will know that the user has been warned and may use their moderator powers accordingly.</p>
+                        <br>
+                        <div>
+                            <h3>Attaching A Reason</h3>
+                            <p>To attach a reason for warning them, you can append the --reason option. Doing so would look like:</p>
+                            <p class="cli">!kick @FF#0255 --reason "Aggressive spamming"</p>
+                            <p>If you'll be attaching no other parameter, you can simply add your reason immediately after the mention. Example: </p>
+                            <p class="cli">!kick @FF#0255 Aggressive spamming</p>
+                            <p>Attaching a reason will reflect onto the guild's audit log. RoundBot will DM the user their warn reason.</p>
+                        </div>
+                    </div>
+                    <div id="unwarn" class="commandcard">
+                        <p class="command">!unwarn [@mention]</p>
+                        <p class="commanddescription">RoundBot removes the warn role from the mentioned member.</p>
+                    </div>
+                    <div id="purge" class="commandcard">
+                        <p class="command">!purge [count]</p>
+                        <p class="commanddescription">RoundBot deletes the specified count of most recent messages from the same text channel. This will only consider up to the latest 100 messages. If you do not specify the count, RoundBot will assume 100.</p>
+                        <br>
+                        <div>
+                            <p>Available Options</p>
+                            <br>
+                            <div>
+                                <p>--search [query]</p>
+                                <p class="cli">!purge 100 --search "p***hub.com"</p>
+                                <p>This will search the latest 100 messages for text that contains "p***hub.com" and delete them.</p>
+                            </div>
+                            <br>
+                            <div>
+                                <p>--regex [regexp]</p>
+                                <p class="cli">!purge 100 --regex "(p\*\*\*hub|xvideos)\.com"</p>
+                                <p>This will test each of the latest 100 messages against the specified regular expression. Only the matched messages will be deleted.</p>
+                            </div>
+                            <br>
+                            <div>
+                                <p>--from [@mention]</p>
+                                <p class="cli">!purge 100 --from @FF#0255</p>
+                                <p>This will delete all messages authored the mentioned user from the latest 100 messages.</p>
+                            </div>
+                            <br>
+                            <p>Only 1 filter can be used. <p class="cli">!purge 100 --from @FF#0255 --search "p***hub.com"</p> will not check for both filters.</p>
+                        </div>
+                    </div>
+                    <div id="addminimod" class="commandcard">
+                        <p class="command">!addminimod [@mention]</p>
+                        <p class="commanddescription">Adds the "minimoderator" role to the mentioned member.</p>
+                    </div>
+                    <div id="removeminimod" class="commandcard">
+                        <p class="command">!removeminimod [@mention]</p>
+                        <p class="commanddescription">Removes the "minimoderator" role from the mentioned member.</p>
+                    </div>
+                </div>
+            </div>
+            <br>
+            <div>
+                <h2>Admin Commands</h2>
+                <p>These commands are only accessible to those with the ADMINISTRATOR permission and admin role.</p>
+                <br>
+                <div>
+                    <div id="addmod" class="commandcard">
+                        <p class="command">!addmod [@mention]</p>
+                        <p class="commanddescription">Adds the "moderator" role to the mentioned user.</p>
+                    </div>
+                    <div id="removemod" class="commandcard">
+                        <p class="command">!removemod [@mention]</p>
+                        <p class="commanddescription">Removes the "moderator" from the mentioned user.</p>
+                    </div>
+                    <div id="clearmutes" class="commandcard">
+                        <p class="command">!clearmutes</p>
+                        <p class="commanddescription">Removes the "mute" role from every member of the guild.</p>
+                    </div>
+                    <div id="clearbans" class="commandcard">
+                        <p class="command">!clearbans</p>
+                        <p class="commanddescription">Unbans ever member from the guild.</p>
+                    </div>
+                    <div id="clearwarns" class="commandcard">
+                        <p class="command">!clearwarns</p>
+                        <p class="commanddescription">Removes the "warned" role from every member of the guild.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br>
+        <%- include('partials/footer') %>
+    </body>
+</html>

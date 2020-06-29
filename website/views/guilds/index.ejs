@@ -1,0 +1,26 @@
+<html>
+    <head>
+        <title>Dashboard - RoundBot</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="description" content="Manage your RoundBot settings for each server">
+        <link rel="stylesheet" type="text/css" href="/assets/css/reset.css">
+        <link rel="stylesheet" type="text/css" href="/assets/css/navbar.css">
+        <link rel="stylesheet" type="text/css" href="/assets/css/guilds/index.css">
+    </head>
+    <body>
+        <%- include('../partials/navbar', {username}) %>
+        <br>
+        <h1>Servers</h1>
+        <br>
+        <div id="serverlist">
+            <% for(var i=0; i<guilds.length; i++){ %>
+            <a class="servercard" href="/guilds/<%= guilds[i].id %>">
+                <img class="servericon" src="<%= guilds[i].icon %>" alt="#">
+                <p><%= guilds[i].name %></p>
+            </a>
+            <% } %>
+        </div>
+        <br>
+        <%- include('../partials/footer') %>
+    </body>
+</html>

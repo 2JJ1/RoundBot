@@ -1,0 +1,251 @@
+<html>
+    <head>
+        <title>Mod Command Settings for <%= guild.name %> - RoundBot</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" type="text/css" href="/assets/css/reset.css">
+        <link rel="stylesheet" type="text/css" href="/assets/css/navbar.css">
+        <link rel="stylesheet" type="text/css" href="/assets/css/guilds/guild/modcommands.css">
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    </head>
+    <body>
+        <%- include('../../partials/navbar', {username}) %>
+        <br>
+        <div id="top" class="space">
+            <a href="../"><img src="<%= guild.icon %>"></a>
+            <p><%- guild.name %>'s Moderator Commands Settings</p>
+        </div>
+        <br>
+        <div id="modules" class="section space">
+            <div class="module">
+                <div class="top">
+                    <p>ban</p>
+                    <label class="switch">
+                        <input 
+                        class="module-toggle"
+                        type="checkbox"
+                        data-module="ban"
+                        <% if(res.settings.ban){ %>checked<% } %>
+                        />
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                <br>
+                <p class="description">Bans the mentioned member from the guild.</p>
+                <a class="btn-info" href="/commands#ban">?</a>
+            </div>
+            <div class="module">
+                <div class="top">
+                    <p>unban</p>
+                    <label class="switch">
+                        <input 
+                        class="module-toggle"
+                        type="checkbox"
+                        data-module="unban"
+                        <% if(res.settings.unban){ %>checked<% } %>
+                        />
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                <br>
+                <p class="description">Unbans the mentioned member from the guild.</p>
+                <a class="btn-info" href="/commands#unban">?</a>
+            </div>
+            <div class="module">
+                <div class="top">
+                    <p>kick</p>
+                    <label class="switch">
+                        <input 
+                        class="module-toggle"
+                        type="checkbox"
+                        data-module="kick"
+                        <% if(res.settings.kick){ %>checked<% } %>
+                        />
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                <br>
+                <p class="description">Kicks the mentioned member from the guild.</p>
+                <a class="btn-info" href="/commands#kick">?</a>
+            </div>
+            <div class="module">
+                <div class="top">
+                    <p>Rate-limit bans</p>
+                    <label class="switch">
+                        <input 
+                        class="module-toggle"
+                        type="checkbox"
+                        data-module="ratelimitbans"
+                        <% if(res.settings.ratelimitbans){ %>checked<% } %>
+                        />
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                <br>
+                <p class="description">Limits the amount of bans to 25 per 24 hours.</p>
+            </div>
+            <div class="module">
+                <div class="top">
+                    <p>mute</p>
+                    <label class="switch">
+                        <input 
+                        class="module-toggle"
+                        type="checkbox"
+                        data-module="mute"
+                        <% if(res.settings.mute){ %>checked<% } %>
+                        />
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                <br>
+                <p class="description">Applies the mute role to the specified member, which then disables their text/voice channel communications.</p>
+                <a class="btn-info" href="/commands#mute">?</a>
+            </div>
+            <div class="module">
+                <div class="top">
+                    <p>unmute</p>
+                    <label class="switch">
+                        <input 
+                        class="module-toggle"
+                        type="checkbox" 
+                        data-module="unmute"
+                        <% if(res.settings.unmute){ %>checked<% } %>
+                        />
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                <br>
+                <p class="description">Removes the mute role from the specified member.</p>
+                <a class="btn-info" href="/commands#unmute">?</a>
+            </div>
+            <div class="module">
+                <div class="top">
+                    <p>warn</p>
+                    <label class="switch">
+                        <input 
+                        class="module-toggle"
+                        type="checkbox" 
+                        data-module="warn"
+                        <% if(res.settings.warn){ %>checked<% } %>
+                        />
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                <br>
+                <p class="description">Adds the warned role to the specified member and DMs them the specified message.</p>
+                <a class="btn-info" href="/commands#warn">?</a>
+            </div>
+            <div class="module">
+                <div class="top">
+                    <p>unwarn</p>
+                    <label class="switch">
+                        <input 
+                        class="module-toggle"
+                        type="checkbox" 
+                        data-module="unwarn"
+                        <% if(res.settings.unwarn){ %>checked<% } %>
+                        />
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                <br>
+                <p class="description">Removes the warned role from the specified member.</p>
+                <a class="btn-info" href="/commands#unwarn">?</a>
+            </div>
+            <div class="module">
+                <div class="top">
+                    <p>purge</p>
+                    <label class="switch">
+                        <input 
+                        class="module-toggle" 
+                        type="checkbox"
+                        data-module="purge"
+                        <% if(res.settings.purge){ %>checked<% } %>
+                        />
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                <br>
+                <p class="description">Deletes the specified amount of newest messages in the same text channel.</p>
+                <a class="btn-info" href="/commands#purge">?</a>
+            </div>
+            <div class="module">
+                <div class="top">
+                    <p>addminimod</p>
+                    <label class="switch">
+                        <input 
+                        class="module-toggle"
+                        type="checkbox"
+                        data-module="addminimod"
+                        <% if(res.settings.addminimod){ %>checked<% } %>
+                        />
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                <br>
+                <p class="description">Applies the mini-moderator role to the specified member which allows them to use mini-moderator commands.</p>
+                <a class="btn-info" href="/commands#addminimod">?</a>
+            </div>
+            <div class="module">
+                <div class="top">
+                    <p>removeminimod</p>
+                    <label class="switch">
+                        <input 
+                        class="module-toggle"
+                        type="checkbox" 
+                        data-module="removeminimod"
+                        <% if(res.settings.removeminimod){ %>checked<% } %>
+                        />
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                <br>
+                <p class="description">Removes the mini-moderator role from the specified member.</p>
+                <a class="btn-info" href="/commands#removeminimod">?</a>
+            </div>
+        </div>
+        <br>
+        <%- include('../../partials/footer') %>
+
+
+
+
+
+
+        <script>
+        function ToggleModule(_module, newVal){
+            return fetch("/api/togglemodule/modcommands", {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    guildId: "<%= guild.id %>",
+                    module: _module,
+                    toggle: newVal
+                })
+            })
+            .then(res => {
+                if(res.status !== 200) throw res.status
+                return res.json()
+            })
+            .then(res => {
+                if(!res.success){
+                    if(res.reason) alert("Error: " + res.reason)
+                    else alert("An unknown server error occured when toggling the module...")
+                    $("input[data-module=" + _module + "]").prop('checked', !newVal)
+                }
+            })
+            .catch(()=>{
+                $("input[data-module=" + _module + "]").prop('checked', !newVal)
+                alert("Failed to update " + _module + " toggle")
+            })
+        }
+
+        $(document).ready(function(){
+            $(".module-toggle").change(function(){
+                ToggleModule($(this).attr("data-module"), this.checked)
+            })
+        })
+        </script>
+    </body>
+</html>

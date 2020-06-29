@@ -1,0 +1,42 @@
+<html>
+    <head>
+        <title>Dashboard - RoundBot</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="description" content="Manage your RoundBot settings for each server">
+        <link rel="stylesheet" type="text/css" href="/assets/css/reset.css">
+        <link rel="stylesheet" type="text/css" href="/assets/css/navbar.css">
+        <link rel="stylesheet" type="text/css" href="/assets/css/admin/index.css">
+    </head>
+    <body>
+        <%- include('../partials/navbar', {username}) %>
+        <br>
+        <h1>Admin Dashboard</h1>
+        <br>
+        <div>
+            <div class="card">
+                <button onclick="RestartBot()">Restart Bot</button>
+                <br>
+                <p>Useful if the bot freezes up due to someone spamming the bot</p>
+            </div>
+        </div>
+        <br>
+        <%- include('../partials/footer') %>
+    </body>
+    <script>
+        function RestartBot(){
+            fetch("/api/admin/restartbot", { method: 'POST' })
+            .then(res => {
+                if(res.status !== 200) throw res.status
+                return res.json()
+            })
+            .then(res => {
+                if(res.success) alert("Success")
+                else{
+                    if(res.reason) alert("Server Error: " + res.reason)
+                    else alert("An unexpected error occured")
+                }
+            })
+            .catch(()=>alert("A connection could not be made to the server"))
+        }
+    </script>
+</html>

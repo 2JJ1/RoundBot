@@ -1,0 +1,35 @@
+{
+  "name": "roundbot",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "btoa": "^1.2.1",
+    "connect-mongo": "^3.2.0",
+    "discord-oauth2": "^2.0.2",
+    "discord.js": "^12.1.1",
+    "dotenv": "^8.2.0",
+    "ejs": "^3.0.1",
+    "express": "^4.17.1",
+    "express-session": "^1.17.0",
+    "helmet": "^3.22.0",
+    "js-base64": "^2.5.2",
+    "mailgun-js": "^0.22.0",
+    "mongoose": "^5.7.12",
+    "node-fetch": "^2.6.0",
+    "node-sass-middleware": "^0.11.0",
+    "pm2": "^4.4.0",
+    "readable-stream": "^3.6.0",
+    "stripe": "^8.25.0",
+    "xss": "^1.0.6"
+  },
+  "devDependencies": {
+    "ejs-lint": "^0.3.0"
+  }
+}

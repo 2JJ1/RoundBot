@@ -1,0 +1,19 @@
+.commandcard{
+    padding: 12px;
+    border-radius: 5px;
+    margin-bottom: 12px;
+    color: white;
+    background: #2a2c30;
+    border-radius: 20px;
+    box-shadow: 0 2px 5px 0 rgba(0,0,0,0.39);
+
+    .command{
+        font-weight: bold;
+        margin-bottom: 12px;
+    }
+
+    .cli{
+        padding: 12px 0px 12px 20px;
+        color: lightgray;
+    }
+}

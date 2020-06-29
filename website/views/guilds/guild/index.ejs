@@ -1,0 +1,364 @@
+<html>
+    <head>
+        <title><%= res.guildname %>'s Guild Settings - RoundBot</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" type="text/css" href="/assets/css/reset.css">
+        <link rel="stylesheet" type="text/css" href="/assets/css/navbar.css">
+        <link rel="stylesheet" type="text/css" href="/assets/css/guilds/guild/index.css">
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    </head>
+    <body>
+        <%- include('../../partials/navbar', {username}) %>
+        <br>
+        <div id="top" class="space">
+            <img src="<%= res.guildicon %>">
+            <p><%- res.guildname %></p>
+        </div>
+        <br>
+        <div class="section space">
+            <% if(res.error === "Can not invite"){ %>
+            <p>The bot is not in this server, but because you are not an admin there, you can not invite the bot.</p>
+            <p>Send this link to an admin if you would like to see this bot in this server!</p>
+            <br>
+            <a href="https://roundbot.net/invite">https://roundbot.net/invite</a>
+            <% } else if(res.error === "Not an admin") { %>
+            <p>You lack admin permissions in this server to manage their RoundBot settings.</p>
+            <% } else if(res.error === "Guild unavailable") { %>
+            <p>It seems the server is currently unavailable due to a server outage.</p>
+            <% } else { %>
+            <div id="dashboard">
+                <h1 style="text-align: center">Dashboard</h2>
+                <br>
+                <hr>
+                <br>
+                <% if(!res.settings.premiumKey) { %>
+                <p style="text-align: center;">This guild is using the free version of RoundBot</p>
+                <br>
+                <% } %>
+                <div class="dash-board-cards">
+                    <div class="dashboard-card">
+                        <p class="title">Cached Mutes</p>
+                        <br>
+                        <p><%= res.cachedMutes %></p>
+                    </div>
+                    <div class="dashboard-card">
+                        <p class="title">Rate Limited Bans</p>
+                        <br>
+                        <p><%= res.todaysBans %>/25</p>
+                    </div>
+                    <div class="dashboard-card">
+                        <p class="title">Total Mutes</p>
+                        <br>
+                        <p><%= res.totalMutes %></p>
+                    </div>
+                    <div class="dashboard-card">
+                        <p class="title">Total Bans</p>
+                        <br>
+                        <p><%= res.totalBans %></p>
+                    </div>
+                </div>
+            </div>
+            <br>
+            <br>
+            <br>
+            <div>
+                <h1 style="text-align: center">Modules</h2>
+                <br>
+                <hr>
+                <br>
+                <h2 style="text-align: center;">Auto Manager</h2>
+                <p style="text-align: center; color: lightgray;">Helps ensure your server is running smoothly</p>
+                <br>
+                <div class="modules">
+                    <div class="card">
+                        <div class="top">
+                            <p>Welcome Message</p>
+                            <label class="switch">
+                                <input 
+                                id="toggle-welcomemessage"
+                                type="checkbox"
+                                <% if(res.settings.welcomemessage){ %>checked<% } %>
+                                />
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                        <br>
+                        <p class="description">When your server gets a new guild member, RoundBot will automatically message them with your specified text.</p>
+                        <br>
+                        <a href="/guilds/<%= guildid %>/welcomemessage/"><button class="btn-edit">Edit</button></a>
+                    </div>
+                    <div class="card">
+                        <div class="top">
+                            <p>Anti-spam</p>
+                            <label class="switch">
+                                <input 
+                                id="toggle-antispam"
+                                type="checkbox"
+                                <% if(res.settings.antispam){ %>checked<% } %>
+                                />
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                        <br>
+                        <p class="description">[Premium] This simple anti-spam will prevent unnecessary duplicate messages from staying in the chat. Prevents message flooding.</p>
+                    </div>
+                    <div class="card">
+                        <div class="top">
+                            <p>Auto-responders</p>
+                            <label class="switch">
+                                <input 
+                                id="toggle-autoresponder"
+                                type="checkbox"
+                                <% if(res.settings.autoresponder){ %>checked<% } %>
+                                />
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                        <br>
+                        <p class="description">[Premium] Your server may have a frequently asked question. Use our message pattern system to have RoundBot automatically respond to them.</p>
+                        <br>
+                        <a href="/guilds/<%= guildid %>/autoresponders/"><button class="btn-edit">Edit</button></a>
+                    </div>
+                    <div class="card">
+                        <div class="top">
+                            <p>Prevent Mute Bypass</p>
+                            <label class="switch">
+                                <input 
+                                id="toggle-mutebypass" 
+                                type="checkbox" 
+                                <% if(res.settings.mutebypass){ %>checked<% } %>
+                                />
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                        <br>
+                        <p class="description">Simply applying the mute role via the "mute" moderator command can easily be bypassed. Members could rejoin the server to remove the mute role. Enable this feature to track muted users who left, so their mute role will be reassigned on rejoin. This means you can mute users instead of banning them, which helps keep your member count high!</p>
+                    </div>
+                    <div class="card">
+                        <div class="top">
+                            <p>Anti-Invite</p>
+                            <label class="switch">
+                                <input 
+                                id="toggle-antiinvite" 
+                                type="checkbox" 
+                                <% if(res.settings.antiinvite){ %>checked<% } %>
+                                />
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                        <br>
+                        <p class="description">Deletes all Discord invite messages.</p>
+                    </div>
+                </div>
+                <br>
+                <h2 style="text-align: center;">General</h2>
+                <br>
+                <div class="modules">
+                    <div class="card">
+                        <div class="top">
+                            <p>Admin Commands</p>
+                            <label class="switch">
+                                <input 
+                                id="toggle-admincommands"
+                                type="checkbox"
+                                <% if(res.settings.admincommands){ %>checked<% } %>
+                                />
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                        <br>
+                        <p class="description">Allows users with the "admin" role or ADMINISTRATOR permission to use admin commands.</p>
+                        <br>
+                        <a href="/guilds/<%= guildid %>/admincommands/"><button class="btn-edit">Toggle Commands</button></a>
+                    </div>
+                    <div class="card">
+                        <div class="top">
+                            <p>Moderator Commands</p>
+                            <label class="switch">
+                                <input 
+                                id="toggle-modcommands"
+                                type="checkbox"
+                                <% if(res.settings.modcommands){ %>checked<% } %>
+                                />
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                        <br>
+                        <p class="description">Allows users with the "Moderator" role to use mod commands.</p>
+                        <br>
+                        <a href="/guilds/<%= guildid %>/modcommands/"><button class="btn-edit">Toggle Commands</button></a>
+                    </div>
+                    <div class="card">
+                        <div class="top">
+                            <p>Fun Commands</p>
+                            <label class="switch">
+                                <input 
+                                id="toggle-funcommands"
+                                type="checkbox"
+                                <% if(res.settings.funcommands){ %>checked<% } %>
+                                />
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                        <br>
+                        <p class="description">Helps keep the guild active by offering engaging commands.</p>
+                        <br>
+                        <a href="/guilds/<%= guildid %>/funcommands/"><button class="btn-edit">Toggle Commands</button></a>
+                    </div>
+                    <div class="card">
+                        <div class="top">
+                            <p>Chatbot</p>
+                            <label class="switch">
+                                <input 
+                                id="toggle-chatbot"
+                                type="checkbox"
+                                <% if(res.settings.chatbot){ %>checked<% } %>
+                                />
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                        <br>
+                        <p class="description">[Premium] Mentioning the bot and typing in a message will trigger the bot's AI to respond.</p>
+                    </div>
+                    <div class="card">
+                        <div class="top">
+                            <p>Message Logs</p>
+                            <label class="switch">
+                                <input 
+                                id="toggle-messagelogs"
+                                type="checkbox"
+                                <% if(res.settings.logMessages){ %>checked<% } %>
+                                />
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                        <br>
+                        <p class="description">[Premium] Logs deleted and edited messages to #logs.</p>
+                    </div>
+                    <div class="card">
+                        <div class="top">
+                            <p>Admin Role Can Edit RoundBot Settings</p>
+                            <label class="switch">
+                                <input 
+                                id="toggle-adminroleeditsettings"
+                                type="checkbox"
+                                <% if(res.settings.adminRoleEditSettings){ %>checked<% } %>
+                                />
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                        <br>
+                        <p class="description">Warning: They could then turn off rate-limits and nuke your server.</p>
+                    </div>
+                    <div class="card">
+                        <div class="top">
+                            <p>antiIPLog</p>
+                            <label class="switch">
+                                <input 
+                                id="toggle-antiIPLog"
+                                type="checkbox"
+                                <% if(res.settings.antiIPLog){ %>checked<% } %>
+                                />
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                        <br>
+                        <p class="description">Deletes messages containing popular IP logger links; Even if hidden behind a short link.</p>
+                    </div>
+                </div>
+            </div>
+            <% } %>
+        </div>
+        <br>
+        <%- include('../../partials/footer') %>
+
+
+
+
+
+
+
+        <script>
+        var guildId = "<%= guildid %>"
+
+        function ToggleModule(_module, moduleName, newVal){
+            return fetch("/api/togglemodule", {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    guildId: guildId,
+                    module: _module,
+                    toggle: newVal
+                })
+            })
+            .then(res => {
+                if(res.status !== 200) throw res.status
+                return res.json()
+            })
+            .then(res => {
+                if(!res.success){
+                    if(res.reason) alert("Error: " + res.reason)
+                    else alert("An unknown server error occured when toggling the module...")
+                    $("#toggle-" + _module).prop('checked', !newVal)
+                }
+            })
+            .catch(()=>{
+                $("#toggle-" + _module).prop('checked', !newVal)
+                alert("Failed to update " + moduleName + " toggle")
+            })
+        }
+
+        $(document).ready(function(){
+            $("#toggle-mutebypass").change(function(){
+                ToggleModule("mutebypass", "Mute Bypass", this.checked)
+            })
+
+            $("#toggle-antiinvite").change(function(){
+                ToggleModule("antiinvite", "Anti-Invite", this.checked)
+            })
+
+            $("#toggle-welcomemessage").change(function(){
+                ToggleModule("welcomemessage", "Welcome Bypass", this.checked)
+            })
+
+            $("#toggle-antispam").change(function(){
+                ToggleModule("antispam", "Anti-spam", this.checked)
+            })
+
+            $("#toggle-autoresponder").change(function(){
+                ToggleModule("autoresponder", "Auto-responder", this.checked)
+            })
+
+            $("#toggle-admincommands").change(function(){
+                ToggleModule("admincommands", "Admin Commands", this.checked)
+            })
+
+            $("#toggle-modcommands").change(function(){
+                ToggleModule("modcommands", "Moderator Commands", this.checked)
+            })
+
+            $("#toggle-funcommands").change(function(){
+                ToggleModule("funcommands", "Fun Commands", this.checked)
+            })
+
+            $("#toggle-chatbot").change(function(){
+                ToggleModule("chatbot", "Chatbot", this.checked)
+            })
+
+            $("#toggle-messagelogs").change(function(){
+                ToggleModule("logMessages", "Message Logs", this.checked)
+            })
+
+            $("#toggle-adminroleeditsettings").change(function(){
+                ToggleModule("adminRoleEditSettings", "Admin Role Can Edit RoundBot Settings", this.checked)
+            })
+
+            $("#toggle-antiIPLog").change(function(){
+                ToggleModule("antiIPLog", "Anti-IP Logger", this.checked)
+            })
+        })
+        </script>
+    </body>
+</html>

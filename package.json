@@ -1,0 +1,29 @@
+{
+  "name": "roundbot",
+  "version": "1.0.0",
+  "description": "",
+  "main": "",
+  "dependencies": {
+    "dotenv": "^8.2.0",
+    "latinize": "^0.4.0",
+    "mailgun-js": "^0.22.0",
+    "minimist": "^1.2.0",
+    "mysql": "^2.17.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "pm2 start ecosystem.config.js",
+    "dev": "npm run start && pm2 logs"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/2JJ1/RoundBot.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/2JJ1/RoundBot/issues"
+  },
+  "homepage": "https://github.com/2JJ1/RoundBot#readme"
+}

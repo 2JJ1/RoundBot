@@ -1,0 +1,25 @@
+@import url("https://fonts.googleapis.com/css?family=Roboto:300,400,600&display=swap");
+
+*{
+    margin: 0;
+    border: 0;
+    box-sizing: border-box;
+    color: #FFFFFF;
+}
+
+body{
+    min-height: 100vh;
+}
+
+html{
+    background-color: #2C2F33;
+}
+
+h1, h2, h3, h4, p, a, span, li, tr, td, textarea, button, input, div{
+    font-weight: 300;
+    font-family: 'Roboto', sans-serif;
+}
+
+button{
+    cursor: pointer;
+}

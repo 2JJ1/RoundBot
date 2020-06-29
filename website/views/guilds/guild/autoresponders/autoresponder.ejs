@@ -1,0 +1,144 @@
+<html>
+    <head>
+        <title>Auto Responder Setting for <%= guild.name %> - RoundBot</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" type="text/css" href="/assets/css/reset.css">
+        <link rel="stylesheet" type="text/css" href="/assets/css/navbar.css">
+        <link rel="stylesheet" type="text/css" href="/assets/css/guilds/guild/autoresponder.css">
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    </head>
+    <body>
+        <%- include('../../../partials/navbar', {username}) %>
+        <br>
+        <div id="top" class="space">
+            <a href="../"><img src="<%= guild.icon %>"></a>
+            <p><%- guild.name %>: Editing an auto responder</p>
+        </div>
+        <br>
+        <div id="autoresponders" class="section space">
+            <div class="autoresponder">
+                <p>Word checkers:</p>
+                <div class="checkers">
+                    <div class="checker">
+                        <input type="text" placeholder="softwarename" value="<%= res.autoResponder.checkers[0] %>"/>
+                        <button class="checker-deletebtn">X</button>
+                    </div>
+                    <div class="checker">
+                        <input type="text" placeholder="broken,not working" value="<%= res.autoResponder.checkers[1] %>"/>
+                        <button class="checker-deletebtn">X</button>
+                    </div>
+                    <% for(var i=2; i<res.autoResponder.checkers.length; i++){ %>
+                    <div class="checker">
+                        <input type="text" placeholder="..." value="<%= res.autoResponder.checkers[i] %>"/>
+                        <button class="checker-deletebtn">X</button>
+                    </div>
+                    <% } %>
+                </div>
+                <br>
+                <button class="btn-addwordchecker">Add</button>
+                <br>
+                <br>
+                <div>
+                    <p>Response:</p>
+                    <textarea 
+                    placeholder="If you need support for Softwarename, go to https://..."
+                    maxlength="2048"
+                    class="input-response"
+                    ><%= res.autoResponder.response %></textarea>
+                    <p class="charcount">0/2048 characters.</p>
+                </div>
+                <br>
+                <div>
+                    <p style="margin-bottom: 8px;">DM Preferred</p>
+                    <label class="switch">
+                        <input 
+                        id="toggle-dmpreferred"
+                        type="checkbox"
+                        <% if(res.autoResponder.dmPreferred){ %>checked<% } %>
+                        />
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                <br>
+                <br>
+                <button id="btn-update" class="update">Update</button>
+            </div>
+        </div>
+        <br>
+        <div class="section space">
+            <h2>Notes</h2>
+            <br>
+            <p>*Each word checker should have at least one word. Words are delimited only by a comma.</p>
+            <p>*If you add a space to a word, then the bot will check if there is a space.</p>
+            <p>*For the response to trigger, A discord message must contain at least one word in each word checker.</p>
+            <p>*This is case insensitive, so "blabla" and "BlAbLA" will match.</p>
+        </div>
+        <br>
+        <%- include('../../../partials/footer') %>
+
+
+
+
+
+
+
+
+
+        <script>
+        $(document).ready(function(){
+            function ToggleDeleteButtons(){
+                var checkerCount = $(".checkers .checker").length
+                if(checkerCount > 2) $(".checker-deletebtn").css("display", "block")
+                else $(".checker-deletebtn").css("display", "none")
+            }
+            //Check right away since the server auto-inserts existing checkers
+            ToggleDeleteButtons()
+
+            $(".input-response").change(function(){
+                $('.charcount').text($(this).val().length + "/2048 characters.")
+            })
+
+            $(".btn-addwordchecker").click(function(){
+                $(".checkers").append($(".checker:first").clone())
+                ToggleDeleteButtons()
+            })
+
+            $(document).on("click", ".checker-deletebtn", function(){
+                $(this).parent().remove()
+                ToggleDeleteButtons()
+            })
+        })
+
+        document.getElementById("btn-update").onclick = function(){
+            //Gets each checker input's value
+            var checkers = []
+            $(".checkers .checker input").each(function(){
+                checkers.push($(this).val())
+            })
+            var response = document.getElementsByClassName("input-response")[0].value
+            var dmPreferred = document.getElementById("toggle-dmpreferred").checked
+
+            fetch("/api/autoresponder", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    guildId: "<%= guild.id %>",
+                    index: <%= responderIndex %>,
+                    checkers: checkers,
+                    response: response,
+                    dmPreferred
+                })
+            })
+            .then(res => res.json())
+            .then(res => {
+                if(res.success) alert("Saved")
+                else if(res.reason) alert("Error: " + res.reason)
+                else alert("Server error: Unknown")
+            })
+            .catch(res => alert("Failed to contact server..."))
+        }
+        </script>
+    </body>
+</html>

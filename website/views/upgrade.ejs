@@ -1,0 +1,204 @@
+<html>
+    <head>
+        <title>RoundBot</title>
+        <meta name="description" content="RoundBot is a feature-rich Discord bot built for moderation, fun, and management."/>
+        <meta name="tags" content="discord bot, discord, bot, anti-spam, antispam, moderator, best discord bot"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <link rel="stylesheet" type="text/css" href="/assets/css/reset.css">
+        <link rel="stylesheet" type="text/css" href="/assets/css/navbar.css">
+        <link rel="stylesheet" type="text/css" href="/assets/css/upgrade.css">
+
+        <script src="https://js.stripe.com/v3/"></script>
+        <script>
+            var stripe = Stripe("<%= stripePublicKey %>");
+            var elements = stripe.elements();
+        </script>
+    </head>
+    <body>
+        <div id="message-box" class="overlay-bg">
+            <div>
+                <button id="exit-message-box">X</button>
+                <p class="title">Title</p>
+                <br>
+                <p class="message">Message</p>
+            </div>
+        </div>
+        <div class="collectpurchase overlay-bg">
+            <div>
+                <div class="top">
+                    <p>Payment</p>
+                    <button id="exit-collectpurchase">X</button>
+                </div>
+                <br>
+                <div class="nd">
+                    <p id="purchase-description"></p>
+                    <img src="/assets/images/key.png" alt="Roundbot Key">
+                    <br></div>
+                <br>
+                <form id="payment-form">
+                    <div id="card-element">
+                        <!-- Elements will create input elements here -->
+                    </div>
+                  
+                    <!-- We'll put the error messages in this element -->
+                    <div id="card-errors" role="alert"></div>
+                    <br>
+                    <button id="submit">Pay</button>
+                </form>
+            </div>
+        </div>
+        <%- include('partials/navbar', {username}) %>
+        <br>
+        <div class="section hook">
+            <h1>Upgrade To Premium RoundBot</h1>
+            <p>Purchase keys to unlock RoundBot's premium features in a guild.</p>
+            <br>
+            <img src="/assets/images/key.png" alt="Roundbot Key">
+        </div>
+        <br>
+        <div class="section plans">
+            <div class="plan">
+                <p class="period">Monthly</p>
+                <p class="price fill">$5</p>
+                <button id="buy-monthly" class="subscribe">Subscribe</button>
+            </div>
+            <div class="br"></div>
+            <div class="plan">
+                <p class="period">Yearly</p>
+                <div class="fill">
+                    <p class="price">$48</p>
+                    <p>20% Off</p>
+                </div>
+                <button id="buy-yearly" class="subscribe">Subscribe</button>
+            </div>
+        </div>
+        <br>
+        <br>
+        <br>
+        <div id="perks" class="section">
+            <h2>Premium Guild Perks</h2>
+            <br>
+            <div class="perks">
+                <div class="perk">
+                    <img src="/assets/images/waterico.png" alt="">
+                    <p>Removes the watermark from welcome messages</p>
+                </div>
+                <div class="perk">
+                    <img src="/assets/images/chatico.png" alt="">
+                    <p>Unlocks auto-responses</p>
+                </div>
+                <div class="perk">
+                    <img src="/assets/images/unlockico.png" alt="">
+                    <p>Unlocks ban rate-limit</p>
+                </div>
+            </div>
+        </div>
+        <br>
+        <%- include('partials/footer') %>
+
+
+
+
+
+
+        <script>
+            //Message box overlay
+            var messageBox = document.getElementById("message-box")
+
+            function ShowMessageBox(title, message, disableClose){
+                messageBox.getElementsByClassName("title")[0].innerHTML = title
+                messageBox.getElementsByClassName("message")[0].innerHTML = message
+                document.getElementById("exit-message-box").style.display = disableClose ? "none" : "block"
+                messageBox.style.display = "flex"
+            }
+
+            document.getElementById("exit-message-box").onclick = function(){
+                messageBox.style.display = "none"
+            }
+
+            //Purchase UI overlay
+            var billingPeriod //monthly or yearly billing?
+
+            document.getElementById("buy-monthly").onclick = function(){
+                <% if(unusedKey){ %>if(!confirm("Warning: You still have an unused key. Click okay if you want to continue with buying another key.")) return<% } %>
+                <% if(!username){ %>return window.location.href = "/login"<% } %>
+                billingPeriod = "monthly"
+                document.getElementById("purchase-description").innerHTML = "Purchasing a premium key at a monthly recurring cost of USD $5.00"
+                document.getElementsByClassName("collectpurchase")[0].style.display = "flex"
+            }
+
+            document.getElementById("buy-yearly").onclick = function(){
+                <% if(unusedKey){ %>if(!confirm("Warning: You still have an unused key. Click okay if you want to continue with buying another key.")) return<% } %>
+                <% if(!username){ %>return window.location.href = "/login"<% } %>
+                billingPeriod = "yearly"
+                document.getElementById("purchase-description").innerHTML = "Purchasing a premium key at a yearly recurring cost of USD $48.00"
+                document.getElementsByClassName("collectpurchase")[0].style.display = "flex"
+            }
+
+            document.getElementById("exit-collectpurchase").onclick = function(){
+                document.getElementsByClassName("collectpurchase")[0].style.display = "none"
+            }
+
+            // Stripe
+            // Set up Stripe.js and Elements to use in checkout form
+            var style = {
+                base: {
+                    color: "#32325d",
+                }
+            };
+
+            var card = elements.create("card", { style: style });
+            card.mount("#card-element");
+
+            card.addEventListener('change', ({error}) => {
+                const displayError = document.getElementById('card-errors');
+                if (error) {
+                    displayError.textContent = error.message;
+                } else {
+                    displayError.textContent = '';
+                }
+            })
+
+            // Payment submission
+            var form = document.getElementById('payment-form');
+
+            form.addEventListener('submit', function(ev) {
+                ev.preventDefault();
+                stripe.createPaymentMethod({
+                    type: 'card',
+                    card: card
+                })
+                .then(function(result) {
+                    if (result.error) ShowMessageBox("Error", result.error.message) //e.g, insufficient funds
+                    else {
+                        ShowMessageBox("Message", "Please wait while we process your payment...", true)
+
+                        fetch("/api/stripe/subscribe", {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/json"
+                            },
+                            body: JSON.stringify({
+                                paymentMethod: result.paymentMethod,
+                                billingPeriod
+                            })
+                        })
+                        .then(res => res.json())
+                        .then(res => {
+                            if(res.success) {
+                                document.getElementsByClassName("collectpurchase")[0].style.display = "none"
+                                ShowMessageBox("Success", "Your payment has completed. You will receive an email shortly confirming the details. You may need to check the spam folder.")
+                            }
+                            else{
+                                if(res.reason) ShowMessageBox("Error", res.reason)
+                                else ShowMessageBox("Error", "Unknown server error when processing your payment...")
+                            }
+                        })
+                        .catch(() => ShowMessageBox("Error", "Failed to contact the server..."))
+                    }
+                });
+            });
+        </script>
+    </body>
+</html>

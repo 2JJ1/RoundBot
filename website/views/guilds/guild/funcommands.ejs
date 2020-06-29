@@ -1,0 +1,144 @@
+<html>
+    <head>
+        <title>Fun Command Settings for <%= guild.name %> - RoundBot</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" type="text/css" href="/assets/css/reset.css">
+        <link rel="stylesheet" type="text/css" href="/assets/css/navbar.css">
+        <link rel="stylesheet" type="text/css" href="/assets/css/guilds/guild/modcommands.css">
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    </head>
+    <body>
+        <%- include('../../partials/navbar', {username}) %>
+        <br>
+        <div id="top" class="space">
+            <a href="../"><img src="<%= guild.icon %>"></a>
+            <p><%- guild.name %>'s Fun Commands Settings</p>
+        </div>
+        <br>
+        <div id="modules" class="section space">
+            <div class="module">
+                <div class="top">
+                    <p>meme</p>
+                    <label class="switch">
+                        <input 
+                        class="module-toggle"
+                        type="checkbox"
+                        data-module="meme"
+                        <% if(res.settings.meme){ %>checked<% } %>
+                        />
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                <br>
+                <p class="description">Sends a random meme to the same text channel.</p>
+                <a class="btn-info" href="/commands#meme">?</a>
+            </div>
+            <div class="module">
+                <div class="top">
+                    <p>8ball</p>
+                    <label class="switch">
+                        <input 
+                        class="module-toggle"
+                        type="checkbox"
+                        data-module="eightball"
+                        <% if(res.settings.eightball){ %>checked<% } %>
+                        />
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                <br>
+                <p class="description">Randomly generates a yes, no, or maybe based response.</p>
+                <a class="btn-info" href="/commands#8ball">?</a>
+            </div>
+            <div class="module">
+                <div class="top">
+                    <p>joke</p>
+                    <label class="switch">
+                        <input 
+                        class="module-toggle"
+                        type="checkbox"
+                        data-module="joke"
+                        <% if(res.settings.joke){ %>checked<% } %>
+                        />
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                <br>
+                <p class="description">Responds with a random joke.</p>
+                <a class="btn-info" href="/commands#joke">?</a>
+            </div>
+            <div class="module">
+                <div class="top">
+                    <p>roast</p>
+                    <label class="switch">
+                        <input 
+                        class="module-toggle"
+                        type="checkbox"
+                        data-module="roast"
+                        <% if(res.settings.roast){ %>checked<% } %>
+                        />
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                <br>
+                <p class="description">Responds with a random insult.</p>
+                <a class="btn-info" href="/commands#roast">?</a>
+            </div>
+            <div class="module">
+                <div class="top">
+                    <p>compile</p>
+                    <label class="switch">
+                        <input 
+                        class="module-toggle"
+                        type="checkbox"
+                        data-module="compile"
+                        <% if(res.settings.compile){ %>checked<% } %>
+                        />
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                <br>
+                <p class="description">Compiles the specified code for the specified language.</p>
+                <a class="btn-info" href="/commands#compile">?</a>
+            </div>
+        </div>
+        <br>
+        <%- include('../../partials/footer') %>
+
+
+
+
+
+
+
+        <script>
+        function ToggleModule(_module, newVal){
+            return fetch("/api/togglemodule/funcommands", {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    guildId: "<%= guild.id %>",
+                    module: _module,
+                    toggle: newVal
+                })
+            })
+            .then(res => {
+                if(res.status !== 200) throw res.status
+                return res.json()
+            })
+            .catch(()=>{
+                $("input[data-module=" + _module + "]").prop('checked', !newVal)
+                alert("Failed to update " + _module + " toggle")
+            })
+        }
+
+        $(document).ready(function(){
+            $(".module-toggle").change(function(){
+                ToggleModule($(this).attr("data-module"), this.checked)
+            })
+        })
+        </script>
+    </body>
+</html>

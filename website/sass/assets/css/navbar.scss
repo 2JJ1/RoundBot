@@ -1,0 +1,67 @@
+#navbar{
+    margin: auto;
+    max-width: 1200px;
+    width: 100%;
+    padding: 12px;
+    display: flex;
+    align-items: center;
+    font-weight: 400;
+    font-size: 17px;
+
+    .navlogo{
+        width: 50px;
+        height: 50px;
+    }
+
+    a{
+        text-decoration: none;
+    }
+
+    .navoption{
+        margin-right: 25px;
+    }
+
+    .right{
+        margin-left: auto;
+    }
+
+    .btn-login{
+        color: black;
+        text-decoration: none;
+        float: right;
+        padding: 10px 30px;
+        background-color: white;
+        border-radius: 20px;
+        font-weight: 400;
+        box-shadow: 0 2px 5px 0 rgba(0,0,0,.39);
+        margin-top: 3px;
+    }
+
+    .dropmenu{
+        position: relative;
+
+        .title{
+            padding-bottom: 6px;
+        }
+
+        .options{
+            display: none;
+            position: absolute;
+            padding: 12px;
+            background-color: 23272A;
+            right: 0;
+            min-width: 150px;
+            min-width: 120px;
+            text-align: center;
+
+            a{
+                display: block;
+            }
+        }
+
+        &:hover .options{
+            display: block;
+            text-align: center;
+        }
+    }
+}

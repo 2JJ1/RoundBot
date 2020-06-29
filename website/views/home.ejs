@@ -1,0 +1,47 @@
+<html>
+    <head>
+        <title>RoundBot</title>
+        <meta name="description" content="RoundBot is a feature-rich Discord bot built for moderation, fun, and management."/>
+        <meta name="tags" content="discord bot, discord, bot, anti-spam, antispam, moderator, best discord bot"/>
+
+        <link rel="stylesheet" type="text/css" href="/assets/css/reset.css">
+        <link rel="stylesheet" type="text/css" href="/assets/css/navbar.css">
+        <link rel="stylesheet" type="text/css" href="/assets/css/home.css">
+    </head>
+    <body>
+        <%- include('partials/navbar', {username}) %>
+        <div id="hook" class="section">
+            <img src="/assets/images/logo.png" alt="RoundBot Logo">
+            <div>
+                <h1>RoundBot, the all in one Discord bot.</h1>
+                <br>
+                <p>Feature-rich for moderation, fun, and management.</p>
+                <br>
+                <a id="btn-invite" href="/invite">
+                    <img src="/assets/images/discord.svg" alt="" class="discordlogo">
+                    Invite to Discord
+                </a>
+            </div>
+        </div>
+        <br>
+        <div class="section">
+            <h2>Why Us?</h2>
+            <br>
+            <p>With the right settings, you could prevent rogue or hacked moderators from nuking your server. Discord servers could be easily destroyed by a single moderator. With the kick/ban permission, they could run a script and kick every single member. This is an unnecessary risk for large servers. To mitigage this, use RoundBot as your middle-man for dangerous moderator commands.</p>
+            <br>
+            <p>Moderators may not be online all the time. They need to sleep or may be busy with personal life. RoundBot is an auto-moderator running 24/7. It will check your chat rooms for spam, auto-respond to certain messages like members asking for help, and more.</p>
+            <br>
+            <p>Chat rooms can get boring to the point where they die out. Bring it back to life with our fun and interactive commands. Like our coding sandbox for the programmers and the simple stuff like 8ball, jokes, and memes.</p>
+            <br>
+            <p>RoundBot is completely customizable. Don't like a feature? Just turn it off!</p>
+        </div>
+        <br>
+        <div class="section">
+            <h2>Setup</h2>
+            <br>
+            <p>Theres only one thing you need to do once you have added RoundBot to your guild. You will need to make RoundBot's role be as high as possible. Failing to do so will prevent features like muting and moderator commands from working.</p>
+        </div>
+        <br>
+        <%- include('partials/footer') %>
+    </body>
+</html>

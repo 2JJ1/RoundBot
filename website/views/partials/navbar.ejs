@@ -1,0 +1,20 @@
+<div id="navbar">
+    <a href="/"><img src="/assets/images/logo.png" class="navlogo navoption"></a>
+    <a href="/invite" target="_blank" class="navoption">Add to Discord</a>
+    <a href="/upgrade" class="navoption">Upgrade</a>
+    <a href="/commands" class="navoption">Commands</a>
+    <div class="right">
+        <% if(username){ %>
+        <div class="dropmenu">
+            <p class="title"><%= username %></p>
+            <div class="options">
+                <a href="/guilds">Servers</a>
+                <a href="/billing">Billing/Keys</a>
+                <a href="/logout">Logout</a>
+            </div>
+        </div>
+        <% } else { %>
+        <a class="btn-login" href="/login">Login</a>
+        <% } %>
+    </div>
+</div>

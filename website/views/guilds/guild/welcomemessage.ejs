@@ -1,0 +1,85 @@
+<html>
+    <head>
+        <title>Welcome Message Settings for <%= guild.name %> - RoundBot</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" type="text/css" href="/assets/css/reset.css">
+        <link rel="stylesheet" type="text/css" href="/assets/css/navbar.css">
+        <link rel="stylesheet" type="text/css" href="/assets/css/guilds/guild/welcomemessage.css">
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    </head>
+    <body>
+        <%- include('../../partials/navbar', {username}) %>
+        <br>
+        <div id="top" class="space">
+            <a href="../"><img src="<%= guild.icon %>"></a>
+            <p><%- guild.name %>'s Welcome Message</p>
+        </div>
+        <br>
+        <div id="welcomemessage" class="section space">
+            <textarea 
+            id="messageinput" 
+            placeholder="Welcome to my server!" 
+            maxlength="2048"
+            ><%- res.welcomemessage %></textarea>
+
+            <br>
+            <p id="charcount">0/2048 characters.</p>
+            <br>
+            <button>Update</button>
+        </div>
+        <br>
+        <div class="section space">
+            <h2>Why?</h2>
+            <br>
+            <p>When your server receives a new member, RoundBot will send them this message. Take this as an opportunity to greet them and tell them to read the rules. Remember that first impressions are important. It will give people an idea of what to expect here.</p>
+        </div>
+        <br>
+        <%- include('../../partials/footer') %>
+        
+        
+        
+        
+        <script>
+        function ToggleModule(_module, newVal){
+            return fetch("/api/togglemodule/modcommands", {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    guildId: "<%= guild.id %>",
+                    module: _module,
+                    toggle: newVal
+                })
+            })
+            .then(res => {
+                if(res.status !== 200) throw res.status
+                return res.json()
+            })
+            .catch(()=>{
+                $("input[data-module=" + _module + "]").prop('checked', !newVal)
+                alert("Failed to update " + _module + " toggle")
+            })
+        }
+
+        $(document).ready(function(){
+            $("#messageinput").change(function(){
+                $("#charcount").text($(this).val().length + "/2048 characters.")
+            })
+
+            $("#welcomemessage button").click(function(){
+                fetch("/api/welcomemessage", {
+                    method: "PUT",
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        guildId: "<%= guild.id %>",
+                        text: $("#messageinput").val()
+                    })
+                })
+            })
+        })
+        </script>
+    </body>
+</html>

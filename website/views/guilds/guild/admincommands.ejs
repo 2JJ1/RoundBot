@@ -1,0 +1,147 @@
+<html>
+    <head>
+        <title>Admin Command Settings for <%= guild.name %> - RoundBot</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" type="text/css" href="/assets/css/reset.css">
+        <link rel="stylesheet" type="text/css" href="/assets/css/navbar.css">
+        <link rel="stylesheet" type="text/css" href="/assets/css/guilds/guild/modcommands.css">
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    </head>
+    <body>
+        <%- include('../../partials/navbar', {username}) %>
+        <br>
+        <div id="top" class="space">
+            <a href="../"><img src="<%= guild.icon %>"></a>
+            <p><%- guild.name %>'s Admin Commands Settings</p>
+        </div>
+        <br>
+        <div id="modules" class="section space">
+            <div class="module">
+                <div class="top">
+                    <p>addmod</p>
+                    <label class="switch">
+                        <input 
+                        class="module-toggle"
+                        type="checkbox"
+                        data-module="addmod"
+                        <% if(res.settings.addmod){ %>checked<% } %>
+                        />
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                <br>
+                <p class="description">Applies the moderator role to the specified member which allows them to use moderator commands.</p>
+                <a class="btn-info" href="/commands#addmod">?</a>
+            </div>
+            <div class="module">
+                <div class="top">
+                    <p>removemod</p>
+                    <label class="switch">
+                        <input 
+                        class="module-toggle"
+                        type="checkbox" 
+                        data-module="removemod"
+                        <% if(res.settings.removemod){ %>checked<% } %>
+                        />
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                <br>
+                <p class="description">Removes the moderator role from the specified member.</p>
+                <a class="btn-info" href="/commands#removemod">?</a>
+            </div>
+            <div class="module">
+                <div class="top">
+                    <p>clearmutes</p>
+                    <label class="switch">
+                        <input 
+                        class="module-toggle"
+                        type="checkbox" 
+                        data-module="clearmutes"
+                        <% if(res.settings.clearmutes){ %>checked<% } %>
+                        />
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                <br>
+                <p class="description">Removes the mute role from all members of the guild and clears the mute cache.</p>
+                <a class="btn-info" href="/commands#clearmutes">?</a>
+            </div>
+            <div class="module">
+                <div class="top">
+                    <p>clearwarns</p>
+                    <label class="switch">
+                        <input 
+                        class="module-toggle"
+                        type="checkbox" 
+                        data-module="clearwarns"
+                        <% if(res.settings.clearwarns){ %>checked<% } %>
+                        />
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                <br>
+                <p class="description">Removes the warned role from all members of the guild.</p>
+                <a class="btn-info" href="/commands#clearwarns">?</a>
+            </div>
+            <div class="module">
+                <div class="top">
+                    <p>clearbans</p>
+                    <label class="switch">
+                        <input 
+                        class="module-toggle" 
+                        type="checkbox"
+                        data-module="clearbans"
+                        <% if(res.settings.clearbans){ %>checked<% } %>
+                        />
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                <br>
+                <p class="description">Unbans all banned members from the guild.</p>
+                <a class="btn-info" href="/commands#clearbans">?</a>
+            </div>
+        </div>
+        <br>
+        <%- include('../../partials/footer') %>
+
+
+
+
+
+
+
+
+
+
+        <script>
+        function ToggleModule(_module, newVal){
+            return fetch("/api/togglemodule/admincommands", {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    guildId: "<%= guild.id %>",
+                    module: _module,
+                    toggle: newVal
+                })
+            })
+            .then(res => {
+                if(res.status !== 200) throw res.status
+                return res.json()
+            })
+            .catch(()=>{
+                $("input[data-module=" + _module + "]").prop('checked', !newVal)
+                alert("Failed to update " + _module + " toggle")
+            })
+        }
+
+        $(document).ready(function(){
+            $(".module-toggle").change(function(){
+                ToggleModule($(this).attr("data-module"), this.checked)
+            })
+        })
+        </script>
+    </body>
+</html>

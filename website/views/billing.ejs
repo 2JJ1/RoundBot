@@ -1,0 +1,261 @@
+<html>
+    <head>
+        <title>RoundBot</title>
+        <meta name="description" content="RoundBot is a feature-rich Discord bot built for moderation, fun, and management."/>
+        <meta name="tags" content="discord bot, discord, bot, anti-spam, antispam, moderator, best discord bot"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <link rel="stylesheet" type="text/css" href="/assets/css/reset.css">
+        <link rel="stylesheet" type="text/css" href="/assets/css/navbar.css">
+        <link rel="stylesheet" type="text/css" href="/assets/css/billing.css">
+
+        <script src="https://js.stripe.com/v3/"></script>
+        <script>
+            var stripe = Stripe("<%= stripePublicKey %>");
+            var elements = stripe.elements();
+        </script>
+    </head>
+    <body>
+        <div id="message-box" class="overlay-bg">
+            <div>
+                <button class="exit-overlay">X</button>
+                <p class="title">Title</p>
+                <br>
+                <p class="message">Message</p>
+            </div>
+        </div>
+        <div id="guild-selection" class="overlay-bg">
+            <div>
+                <button class="exit-overlay">X</button>
+                <h2>Guild Selection</h2>
+                <p>Which guild do you want to assign the key?</p>
+
+                <br>
+                <div class="options">
+                    <% for(var i=0; i<availableGuilds.length; i++){ %>
+                    <div class="option" onclick="AssignKeyToGuild('<%= availableGuilds[i].id %>')">
+                        <img src="<%= availableGuilds[i].icon %>">
+                        <p><%= availableGuilds[i].name %></p>
+                    </div>
+                    <% } %>
+                </div>
+            </div>
+        </div>
+        <div class="collectpurchase overlay-bg">
+            <div>
+                <button class="exit-overlay">X</button>
+                <p class="title">Payment</p>
+                <br>
+                <form id="payment-form">
+                    <div id="card-element">
+                        <!-- Elements will create input elements here -->
+                    </div>
+                  
+                    <!-- We'll put the error messages in this element -->
+                    <div id="card-errors" role="alert"></div>
+                    <br>
+                    <button id="submit">Pay</button>
+                </form>
+            </div>
+        </div>
+        <%- include('partials/navbar', {username}) %>
+        <br>
+        <div id="paymentmethod" class="section">
+            <div>
+                <h2>Payment Method</h2>
+                <p>This is the card used to pay for your premium key subscriptions.</p>
+                <br>
+                <% if(paymentMethod){ %>
+                <div>
+                    <p><%= paymentMethod.card.brand !== "unknown" && paymentMethod.card.brand %> xxxx-<%= paymentMethod.card.last4 %></p>
+                    <p>Expires <%= paymentMethod.card.exp_month %>/<%= paymentMethod.card.exp_year %></p>
+                </div>
+                <% } else { %>
+                <p class="error">There is no payment method attached to your account. Please attach one, otherwise any existing subscription will expire on their next charge.</p>
+                <% } %>
+                <br>
+                <button id="btnEditCard">Edit</button>
+                <% if(paymentMethod){ %> <button onclick="DeletePaymentMethod()">Delete</button> <% } %>
+            </div>
+        </div>
+        <br>
+        <div id="keys" class="section">
+            <h2>Manage Keys</h2>
+            <br>
+            <div class="cards">
+                <% for(var i=0; i<keys.length; i++){ %>
+                <div class="key" data-subid="<%= keys[i]._id %>">
+                    <% if(keys[i].guild){ %>
+                    <p>Assigned to guild: <span title="ID: <%= keys[i].guild.id %>"><%= keys[i].guild.name %></span></p>
+                    <% } else { %>
+                    <p class="warning">This key is unused. Click on the "Change Guild" button to assign this key to a guild. Doing so will unlock premium features in the selected guild.</p>
+                    <% } %>
+                    <br>
+                    <% if(keys[i].cancel_at_period_end) { %>
+                    <p>Expires: <%= keys[i].expires %></p>
+                    <br>
+                    <button onclick="ToggleSubscribed(this, true)">Continue Subscription</button>
+                    <% } else { %>
+                    <p>Next Payment Due: <%= keys[i].expires %></p>
+                    <br>
+                    <button onclick="ToggleSubscribed(this, false)">Cancel Subscription</button>
+                    <% } %>
+                    <button onclick="SelectGuildForKey('<%= keys[i]._id %>')">Change Guild</button>
+                </div>
+                <br>
+                <% } %>
+            </div>
+        </div>
+        <br>
+        <%- include('partials/footer') %>
+
+
+
+
+
+
+        <script>
+            //Listens for all overlay exits
+            var exitButtons = document.getElementsByClassName("exit-overlay")
+            for(var i=0; i<exitButtons.length; i++){
+                exitButtons[i].addEventListener("click", function(){
+                    this.parentElement.parentElement.style.display = "none"
+                })
+            }
+
+            //Message box overlay
+            var messageBox = document.getElementById("message-box")
+            function ShowMessageBox(title, message, disableClose){
+                messageBox.getElementsByClassName("title")[0].innerHTML = title
+                messageBox.getElementsByClassName("message")[0].innerHTML = message
+                messageBox.getElementsByClassName("exit-overlay")[0].style.display = disableClose ? "none" : "block"
+                messageBox.style.display = "flex"
+            }
+
+            //Card collection overlay
+            document.getElementById("btnEditCard").onclick = function(){
+                document.getElementsByClassName("collectpurchase")[0].style.display = "flex"
+            }
+
+            function DeletePaymentMethod(){
+                //Deletes the payment method
+                fetch("/api/stripe/paymentmethod", {
+                    method: "DELETE"
+                })
+                .then(res => res.json())
+                .then(res => {
+                    if(res.success) location.reload()
+                    else{
+                        if(res.reason) ShowMessageBox("Error", res.reason)
+                        else ShowMessageBox("Error", "Unknown server error when removing your payment method...")
+                    }
+                })
+                .catch(() => ShowMessageBox("Error", "Failed to contact the server..."))
+            }
+
+            function ToggleSubscribed(element, toggle){
+                fetch("/api/stripe/subscription", {
+                    method: "PATCH",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        id: element.parentElement.getAttribute("data-subid"),
+                        subscribed: toggle
+                    })
+                })
+                .then(res => res.json())
+                .then(res => {
+                    if(res.success) location.reload()
+                    else{
+                        if(res.reason) ShowMessageBox("Error", res.reason)
+                        else ShowMessageBox("Error", "Unknown server error when toggle your subscription...")
+                    }
+                })
+                .catch(() => ShowMessageBox("Error", "Failed to contact the server..."))
+            }
+
+            //Key assignment
+            var keyToAssign
+            function SelectGuildForKey(keyId){
+                keyToAssign = keyId
+                document.getElementById("guild-selection").style.display = "flex"
+            }
+            function AssignKeyToGuild(guildId){
+                fetch("/api/stripe/assignkeytoguild", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        key: keyToAssign,
+                        guildId
+                    })
+                })
+                .then(res => res.json())
+                .then(res => {
+                    if(res.success) location.reload()
+                    else{
+                        if(res.error) ShowMessageBox("Error", res.error)
+                        else ShowMessageBox("Error", "Unknown server error when assigning a key to a guild...")
+                    }
+                })
+                .catch(() => ShowMessageBox("Error", "Failed to contact the server..."))
+            }
+
+            // Stripe
+            // Set up Stripe.js and Elements to use in checkout form
+            var style = {
+                base: {
+                    color: "#32325d",
+                }
+            };
+
+            var card = elements.create("card", { style: style });
+            card.mount("#card-element");
+
+            card.addEventListener('change', ({error}) => {
+                const displayError = document.getElementById('card-errors');
+                if (error) {
+                    displayError.textContent = error.message;
+                } else {
+                    displayError.textContent = '';
+                }
+            })
+
+            // Payment submission
+            var form = document.getElementById('payment-form');
+
+            form.addEventListener('submit', function(ev) {
+                ev.preventDefault();
+                stripe.createPaymentMethod({
+                    type: 'card',
+                    card: card,
+                })
+                .then(function(result) {
+                    if (result.error) ShowMessageBox("Error", result.error.message) //e.g, insufficient funds
+                    else {
+                        ShowMessageBox("Message", "Please wait while we process the update...", true)
+
+                        fetch("/api/stripe/paymentmethod", {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/json"
+                            },
+                            body: JSON.stringify({paymentMethod: result.paymentMethod})
+                        })
+                        .then(res => res.json())
+                        .then(res => {
+                            if(res.success) location.reload()
+                            else{
+                                if(res.reason) ShowMessageBox("Error", res.reason)
+                                else ShowMessageBox("Error", "Unknown server error when updating your payment method...")
+                            }
+                        })
+                        .catch(() => ShowMessageBox("Error", "Failed to contact the server..."))
+                    }
+                });
+            });
+        </script>
+    </body>
+</html>

@@ -1,0 +1,154 @@
+button{
+    padding: 8px 20px;
+    border-radius: 5px;
+    background-color: #23272A;
+    font-weight: 400;
+    cursor: pointer;
+}
+
+.error{
+    color: red;
+}
+
+.warning{
+    color: orange;
+}
+
+.section{
+    max-width: 1000px;
+    width: 100%;
+    margin: auto;
+    padding: 12px;
+}
+
+.overlay-bg{
+    background: rgba(0,0,0,.7);
+    position: absolute;
+    height: 100vh;
+    width: 100vw;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    padding: 12px;
+
+    .exit-overlay{
+        color: #F35353;
+        background: none;
+        border: none;
+        font-size: 18px;
+        font-weight: bold;
+        float: right;
+        padding: 0;
+        margin: 0;
+    }
+}
+
+#message-box{
+    z-index: 2;
+    & > div{
+        max-width: 380px;
+        width: 100%;
+        background-color: #2a2c30;
+        padding: 20px;
+        box-shadow: 0 2px 5px 0 rgba(0,0,0,.39);
+
+        .title{
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        .message{
+            font-size: 16px;
+        }
+    }
+}
+
+#guild-selection{
+    & > div{
+        max-width: 850px;
+        width: 100%;
+        background-color: #2a2c30;
+        padding: 20px;
+        box-shadow: 0 2px 5px 0 rgba(0,0,0,.39);
+
+        .options{
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+    
+            .option{
+                cursor: pointer;
+                text-align: center;
+                
+                img{
+                    width: 120px;
+                    height: 120px;
+                    margin: 6px;
+                }
+            }
+        }
+    }
+}
+
+.collectpurchase{
+    z-index: 1;
+    & > div{
+        max-width: 380px;
+        width: 100%;
+        background-color: #2a2c30;
+        padding: 12px;
+        box-shadow: 0 2px 5px 0 rgba(0,0,0,.39);
+
+        .title{
+            flex: 1;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .nd{
+            display: flex;
+            align-items: center;
+
+            img{
+                height: 70px;
+                margin-left: 12px;
+            }
+        }
+
+        #card-element{
+            background-color: white;
+            padding: 10px 10px;
+            border-radius: 4px;
+            font-size: 18px;
+        }
+
+        #submit{
+            background-color: #F35353;
+            width: 100%;
+            padding: 8px 0;
+            font-size: 18px;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+    }
+}
+
+#paymentmethod{
+    &>div{
+        box-shadow: 0 2px 5px 0 rgba(0,0,0,0.39);
+        padding: 12px;
+        border-radius: 5px;
+        background-color: #2a2c30;
+    }
+}
+
+#keys{
+    .cards{
+        .key{
+            box-shadow: 0 2px 5px 0 rgba(0,0,0,0.39);
+            padding: 12px;
+            border-radius: 5px;
+            background-color: #2a2c30;
+        }
+    }
+}

@@ -1,0 +1,80 @@
+<html>
+    <head>
+        <title>Auto Responder Settings for <%= guild.name %> - RoundBot</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" type="text/css" href="/assets/css/reset.css">
+        <link rel="stylesheet" type="text/css" href="/assets/css/navbar.css">
+        <link rel="stylesheet" type="text/css" href="/assets/css/guilds/guild/autoresponders.css">
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    </head>
+    <body>
+        <%- include('../../../partials/navbar', {username}) %>
+        <br>
+        <div id="top" class="space">
+            <a href="../"><img src="<%= guild.icon %>"></a>
+            <p><%- guild.name %>'s Autoresponders</p>
+        </div>
+        <br>
+        <div id="autoresponders" class="section space">
+            <% 
+            var i;
+            for(i=0; i<res.autoResponders.checkers.length; i++){ 
+            %>
+            <div class="autoresponder">
+                <div>
+                    <p>Checkers:</p>
+                    <% for(var v=0; v<res.autoResponders.checkers[i].length; v++){ %>
+                    <p>* <%= res.autoResponders.checkers[i][v] %></p>
+                    <% } %>
+                </div>
+                <p>Response: <%= res.autoResponders.responses[i] %></p>
+                <a href="./<%= i %>/" class="btn-edit">Edit</a>
+                <button data-index="<%= i %>" class="btn-delete">Delete</button>
+            </div>
+            <br>
+            <% } %>
+        </div>
+        <br>
+        <div class="section space">
+            <a href="./<%= i %>/">Add new</a>
+        </div>
+        <br>
+        <%- include('../../../partials/footer') %>
+
+
+
+
+
+
+        <script>
+        $(document).ready(function(){
+            $('.btn-delete').click(function(){
+                if(!confirm("Click okay to confirm deletion.")) return
+                var checker = $(this).parent()
+
+                var index = parseInt($(this).attr('data-index'))
+                fetch("/api/autoresponder", {
+                    method: "DELETE",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        guildId: "<%= guild.id %>",
+                        index
+                    })
+                })
+                .then(res => res.json())
+                .then(res => {
+                    if(res.success) {
+                        //Wait 1 second before refreshing the page to dodge the rate limit error
+                        setTimeout(()=>{document.location.reload()}, 1000)
+                    }
+                    else if(res.reason) alert("Error: " + res.reason)
+                    else alert("Server error: Unknown")
+                })
+                .catch(res => alert("Failed to contact server..."))
+            })
+        })
+        </script>
+    </body>
+</html>
